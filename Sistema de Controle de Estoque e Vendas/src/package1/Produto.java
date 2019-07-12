@@ -2,10 +2,10 @@ package package1;
 
 public class Produto {
 
-	private int codigo;
-	private String nome;
-	private int qntEmEstoque;
-	private double preco;
+	protected int codigo;
+	protected String nome;
+	protected int qntEmEstoque;
+	protected double preco;
 	
 	public Produto(int codigo, String nome1, int qntEmEstoque1, double preco1) {
 		this.codigo = codigo;
@@ -14,6 +14,9 @@ public class Produto {
 		preco = preco1;
 	}
 	
+	public void vender(int qnt) {
+		this.qntEmEstoque -= qnt;
+	}
 	public int getCodigo() {
 		return codigo;
 	}
