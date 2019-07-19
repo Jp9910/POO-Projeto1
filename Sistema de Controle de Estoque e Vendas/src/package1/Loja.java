@@ -117,7 +117,8 @@ public class Loja {
 				}
 				if(test==0)
 				{
-					System.out.println("Produto Invalido. Digite novamente.");
+					System.out.println(">ERRO: Produto Invalido.");
+					System.out.println(">Digite o produto novamente ou digite \"Cancelar\" para cancelar a operacao de venda.");
 				}
 			}
 		}
