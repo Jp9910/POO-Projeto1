@@ -2,21 +2,27 @@ package package1;
 import java.util.Scanner;
 public class Loja {
 	private static Scanner sc;
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 		sc = new Scanner(System.in);
-		int i,j,opcao,codigo,quant,quant1,cont1=0,qntProdutos=0,qntClientes=0,qntVendas=0; 
-		String nome,data,nome1;
+		int i,j,k,opcao,codigo,quant,quant1,cont1=0,qntProdutos=0,qntClientes=0,qntVendas=0; 
+		String nome,data,nome1,condicaoSaida;
 		Produto[] produtos = new Produto[50];
 		Cliente[] clientes = new Cliente[50];
 		Venda[] vendas = new Venda[50];
 		do {
-			System.out.println("O que deseja fazer?");
+			System.out.println("*****O que deseja fazer? Digite o numero correspondente a opcao.*****");
 			System.out.println("1.Cadastrar cliente.");
 			System.out.println("2.Cadastrar produto.");
 			System.out.println("3.Realizar venda.");
 			System.out.println("4.Aumentar estoque de um produto.");
 			System.out.println("5.Listar clientes cadastrados.");
 			System.out.println("6.Listar produtos cadastrados.");
+			System.out.println("7.Listar produtos em estoque.");
+			System.out.println("8.Listar produtos esgotados.");
+			System.out.println("9.Listar vendas realizadas.");
+			System.out.println("10.Listar compras realizadas por um cliente.");
+			System.out.println("**********************************************************************");
 			opcao=sc.nextInt();
 			
 			if(opcao == 1) 
@@ -58,13 +64,17 @@ public class Loja {
 				System.out.print("Quantidade de produtos diferentes: ");
 				quant=sc.nextInt();
 				Item[] itens = new Item[quant];
-				for(i=0;i<quant;i++) {
+				cont1 = 0;
+				for(i=0;i<quant;i++) 
+				{
 					System.out.print("Nome do produto "+i+": ");
 					nome1=sc.next();
 					System.out.print("Quantidade: ");
 					quant1=sc.nextInt();
-					for(j=0;j<qntProdutos;j++) {
-						if(nome1.equalsIgnoreCase(produtos[j].getNome())) {
+					for(j=0;j<qntProdutos;j++) 
+					{
+						if(nome1.equalsIgnoreCase(produtos[j].getNome())) 
+						{
 							produtos[j].vender(quant1);
 							itens[cont1] = new Item(produtos[j].getCodigo(),nome1,produtos[j].getQntEmEstoque(),produtos[j].getPreco(),quant1);
 							cont1++;
@@ -72,9 +82,11 @@ public class Loja {
 						}
 					}
 				}
-				for(i=0;i<qntClientes;i++) {
-					if(nome.equalsIgnoreCase(clientes[i].getNome())) {
-						Venda venda = new Venda(codigo,clientes[i],data,itens);
+				for(i=0;i<qntClientes;i++) 
+				{
+					if(nome.equalsIgnoreCase(clientes[i].getNome())) 
+					{
+						Venda venda = new Venda(codigo,clientes[i],data,itens,quant);
 						clientes[i].Comprar(venda);
 						vendas[qntVendas] = venda;
 						qntVendas++;
@@ -90,8 +102,10 @@ public class Loja {
 				nome = sc.next();
 				System.out.println("Quantidade adicionada: ");
 				quant = sc.nextInt();
-				for(j=0;j<qntProdutos;j++) {
-					if(nome.equalsIgnoreCase(produtos[j].getNome())) {
+				for(j=0;j<qntProdutos;j++) 
+				{
+					if(nome.equalsIgnoreCase(produtos[j].getNome())) 
+					{
 						produtos[j].qntEmEstoque += quant;
 						break;
 					}
@@ -101,22 +115,93 @@ public class Loja {
 			else if(opcao == 5) 
 			{
 				System.out.println("Lista de clientes: ");
-				for(i=0;i<qntClientes;i++) {
-					System.out.print(clientes[i].getNome());
-					System.out.println(". Quantidade de compras: "+clientes[i].getQntCompras());
+				for(i=0;i<qntClientes;i++) 
+				{
+					System.out.print("\t"+clientes[i].getNome());
+					System.out.println("--> Quantidade de compras: "+clientes[i].getQntCompras());
 				}
 			}
 			
 			else if(opcao == 6) 
 			{
 				System.out.println("Lista de produtos: ");
-				for(i=0;i<qntProdutos;i++) {
-					System.out.print(produtos[i].getNome());
-					System.out.println("Codigo: "+produtos[i].getCodigo()+". Quantidade em estoque: "+produtos[i].getQntEmEstoque()+". Preco: "+produtos[i].getPreco());
+				for(i=0;i<qntProdutos;i++) 
+				{
+					System.out.print("\t"+produtos[i].getNome());
+					System.out.println("--> Codigo: "+produtos[i].getCodigo()+". Quantidade em estoque: "+produtos[i].getQntEmEstoque()+". Preco: "+produtos[i].getPreco());
 				}
 			}
 			
-		} while(!("sair".equalsIgnoreCase(sc.next())));
+			else if(opcao == 7) 
+			{
+				System.out.println("Lista de produtos em estoque: ");
+				for(i=0;i<qntProdutos;i++) 
+				{
+					if(produtos[i].getQntEmEstoque() > 0) 
+					{
+						System.out.print("\t"+produtos[i].getNome());
+						System.out.println("--> Codigo: "+produtos[i].getCodigo()+". Quantidade em estoque: "+produtos[i].getQntEmEstoque()+". Preco: "+produtos[i].getPreco());
+					}
+				}
+			}
+			else if (opcao == 8) 
+			{
+				System.out.println("Lista de produtos esgotados: ");
+				for(i=0;i<qntProdutos;i++) 
+				{
+					if(produtos[i].getQntEmEstoque() < 1) 
+					{
+						System.out.print("\t"+produtos[i].getNome());
+						System.out.println("--> Codigo: "+produtos[i].getCodigo()+". Quantidade em estoque: (Esgotado). Preco: "+produtos[i].getPreco());
+					}
+				}
+			}
+			else if (opcao == 9) 
+			{
+				System.out.println("Quantidade de vendas realizadas: "+qntVendas);
+				System.out.println("Lista de vendas realizadas: ");
+				for(i=0;i<qntVendas;i++) 
+				{
+					Item[] itensAux = vendas[i].getItens();
+					System.out.println("Venda de Codigo "+vendas[i].getCodigo());
+					System.out.println("\tComprador: "+vendas[i].getComprador().getNome());
+					System.out.println("\tData: "+vendas[i].getData());
+					System.out.println("\tProdutos vendidos: ");
+					for(j=0;j<vendas[i].getQntProdutosDiferentes();j++) 
+					{
+						System.out.print("\t\t"+itensAux[j].getNome());
+						System.out.print("-> quantidade: ");
+						System.out.println(itensAux[j].getQntVendida());
+					}
+				}
+			}
+			else if (opcao == 10) 
+			{
+				System.out.print("Nome do cliente: ");
+				nome = sc.next();
+				for(i=0;i<qntClientes;i++) 
+				{
+					if(nome.equalsIgnoreCase(clientes[i].getNome())) 
+					{
+						System.out.println("Numero de compras:"+clientes[i].getQntCompras());
+						System.out.println("Lista de compras: ");
+						for(j=0;j<clientes[i].getQntCompras();j++) 
+						{
+							System.out.println("Compra de codigo: "+clientes[i].getCompras()[j].getCodigo());
+							System.out.println("\tData:"+clientes[i].getCompras()[j].getData());
+							System.out.println("\tProdutos:");
+							for(k=0;k<clientes[i].getCompras()[j].getQntProdutosDiferentes();k++) 
+							{
+								System.out.print("\t\t"+clientes[i].getCompras()[j].getItens()[k].getNome());
+								System.out.println("--> quantidade:"+clientes[i].getCompras()[j].getItens()[k].getQntVendida());
+							}
+						}
+					}
+				}
+			}
+			System.out.println("Deseja Continuar?");
+			condicaoSaida = sc.next();
+		} while(!("sair".equalsIgnoreCase(condicaoSaida)) && !("nao".equalsIgnoreCase(condicaoSaida)) && !("não".equalsIgnoreCase(condicaoSaida)));
 	}
 	
 	public void listarProdutosEmEstoque() {
